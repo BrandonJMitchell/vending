@@ -2,12 +2,14 @@ package com.solutions.vendingmachine.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
-public class WebRoutingConfig extends WebMvcConfigurerAdapter {
+public class WebRoutingConfig implements WebMvcConfigurer {
 
 	/**
 	 * This forwards all requests not handled otherwise to index.html.
@@ -27,4 +29,16 @@ public class WebRoutingConfig extends WebMvcConfigurerAdapter {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
     	registry.addResourceHandler("/assets/**").addResourceLocations("/assets/");
     }
+    
+    /**
+     * Global CORS config
+     */
+    @Override
+	public void addCorsMappings(CorsRegistry registry) {
+		registry.addMapping("/api/**")
+			.allowedOrigins("http://localhost:4200")
+			.allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE")
+			.allowCredentials(false)
+			.maxAge(1800);
+	}
 }
